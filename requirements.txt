@@ -1,0 +1,3 @@
+feedparser
+psycopg[binary]
+python-dotenv

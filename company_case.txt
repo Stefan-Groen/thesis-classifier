@@ -1,0 +1,216 @@
+Case Biclou Prestige
+Biclou Prestige SARL, or Biclou for short, is a road bike manufacturer founded in 1960 in
+France by Louis Levieux. Over the years, Biclou has become a well-known brand,
+supplying bikes at the forefront of professional cycling. For more than fifty years, the
+company was run by the Levieux family. However, in 2012, it underwent a management
+buyout led by Véronique Vitessier. With a focus on increasing market share, Vitessier
+aimed to preserve Biclou’s innovative spirit while expanding its range with more
+affordable models to boost sales and attract a broader audience.
+Overall, Vitessier’s vision for Biclou turned out to be a success. It now sells road bikes to
+a range of consumers, from elite cyclists to amateur enthusiasts. During the COVID-19
+pandemic, the company experienced a surge in demand, particularly in Western Europe,
+as more consumers took up cycling—both for its health benefits and as a way to make
+use of newfound flexibility from remote work. However, already in 2023, demand in
+Western Europe started plateauing and is now returning to pre-COVID-19 levels. In
+addition, in Southern and Eastern Europe, Biclou has struggled to gain traction, where
+lower-cost alternatives dominate. Expanding into these regions is a key priority, aligning
+with Vitessier’s strategy to grow market share.
+To reach consumers, Biclou relies on a network of retailers. Retailers stock a range of
+models, from the entry-level Pétard Mouillé to the mid-range Chasse Patate to the high-
+performance Échappée Royale series, catering to cyclists of all levels. Beyond amateur
+riders, Biclou has also cemented its reputation in professional cycling through its
+sponsorship of Cofidis, a UCI WorldTour team known for its relentless breakaway
+attempts, particularly in French races. As the team’s official bike sponsor since 1980,
+Biclou provides cutting-edge racing bikes designed in close collaboration with Cofidis
+riders and technical staff. Vitessier considers this partnership a cornerstone of Biclou’s
+brand, reinforcing its identity as a high-performance innovator while showcasing its
+engineering on the sport’s biggest stages. With the sponsorship contract running until
+2026, Biclou remains committed to refining its bikes to meet the evolving demands of
+professional racing, hoping to secure an extension and maintain its presence in the
+peloton for years to come.
+Biclou’s demand is split between two main groups: Cofidis and consumer sales. While
+Cofidis accounts for only a small portion of total production output, its orders receive
+priority handling, with deliveries required within 72 hours. Demand from Cofidis remains
+relatively stable throughout the year, with predictable peaks before the Giro d’Italia, Tour
+de France, and Vuelta a España, as well as during new model rollouts. Consumer
+demand, in contrast, is more volatile, following a seasonal pattern with peak sales in
+spring and early summer, tapering off in autumn and winter. To anticipate demand, Biclou
+relies on quantitative forecasting models that analyse historical sales trends, adjusted by
+manual input from the sales team. These adjustments reflect expected industry trends,
+large sports events, and insights from retailer conversations, ensuring forecasts align
+with anticipated market conditions. Once final demand predictions are set by the sales
+team, the operations team uses them to plan production schedules and procurement.
+
+Biclou’s supply chain
+Biclou’s road bikes are assembled in France, but their production depends on a carefully
+selected network of suppliers. Road bike producers, like Biclou, rely on complex global
+supply chains for materials and components. Most modern road bikes use lightweight
+materials (e.g., carbon composites and aluminium alloys) for their frames and
+components sourced from specialized suppliers around the world. Many Tier-1 suppliers
+rely on Tier-2 and Tier-3 suppliers, meaning disruptions at any level can impact final
+production and assembly in France. Lead times are extremely long, with some
+components needing to be ordered many months in advance to ensure availability. The
+cycling industry is heavily clustered in East Asia where many parts are manufactured.
+Taiwan is the premier hub of original equipment manufacturers – the city of Taichung and
+surrounding area host hundreds of bike industry factories. Taiwan alone has over 900
+bicycle-related companies, employing more than 32,000 people.
+Frame production
+Biclou’s entry-level Pétard Mouillé is built using aluminium alloy frames sourced from
+Niuaero in China. Biclou’s mid-range Chasse Patate and high-performance Échappée
+Royale rely on advanced carbon fibre frames. These are sourced from two of the largest
+Original Equipment Manufacturers (OEMs) in the industry: Kenstone Metal and Giant
+Manufacturing, both located in Taiwan. Giant Manufacturing not only sells under their
+own brand but also produce frames on contract for many Western brands.
+High-end frame factories source prepreg carbon fibre (carbon sheets pre-impregnated
+with resin) from Japanese firms like Toray, Toho Tenax, and Mitsubishi Rayon, which
+dominate the global carbon fibre market. Prepreg carbon sheets are precisely cut and
+layered into moulds based on Biclou’s specifications. The carbon layers are baked in
+autoclaves under high pressure to create a strong, lightweight structure. The cured
+frames undergo precision CNC machining, sanding, and drilling to prepare for assembly.
+Frames are weighed, impact-tested, and scanned for imperfections before shipment to
+France.
+Component sourcing
+Biclou sources most components from Asia. Shimano has been a key supply partner of
+Biclou. Before 2020, it was Biclou’s only supplier of groupsets – consisting of the shifters,
+derailleurs, crankset, chain, cassette, and brakes. Shimano has had roughly 70% of the
+global market share in bike gears and brakes. It produces components across a network
+of factories in Japan, Singapore, Malaysia, and China, ensuring volume supply. During
+COVID-19 its production got severely disrupted, causing headaches for Biclou’s
+production planning. Since then, Biclou also sources some groupsets from SRAM (USA)
+and recently started discussions with Campagnolo (Italy).
+Some other key supply partnerships include DT Swiss (Taiwan) and Mavic (France) for
+wheelsets, Schwalbe (Germany) and Maxxis (Taiwan) for tires, and Selle Royal (Italy) and
+Velo Enterprise (Taiwan) for saddles and handlebars. Biclou further sources numerous
+smaller components – headsets and bearings, braking rotors and pads for disc brake
+models, cables and housing and bar tape. Even these smaller items often trace back to a
+few sources worldwide. For example, most ball bearings in bikes come from
+manufacturers in Germany specializing in precision bearings.
+
+Biclou’s production
+Once frames and components arrive in France, Biclou takes over the final steps of
+production at its facility. Biclou’s production team installs drivetrains, handlebars,
+wheelsets, and braking systems, transforming bare frames into fully functional bikes.
+Before shipping, every bike undergoes a comprehensive check, including gear shifting
+precision, brake performance and alignment, and frame integrity and weight verification.
+For consumer models, a random sample is pulled for full structural testing to ensure
+consistency. Unlike consumer bikes, Cofidis team frames arrive unpainted and receive
+their official team livery in France. Biclou’s facility applies custom paint jobs and sponsor
+decals. It also makes team-specific modifications (e.g., cockpit adjustments).
+Biclou maintains a small-scale workshop where its engineering team tests new designs
+before production. This setup allows for material and aerodynamics prototyping,
+validating new frame geometries, and component fit testing to ensure compatibility
+between different supplier parts. It also supports pre-production evaluations, allowing
+Biclou to refine designs before committing to large-scale manufacturing runs in East Asia.
+By keeping engineering, testing, and quality control in-house, Biclou ensures its bikes
+meet the highest performance standards while benefiting from the specialized
+manufacturing expertise of its suppliers.
+
+Organizational structure
+Biclou’s executive board is tightly involved in both strategic direction and day-to-day
+operations. Véronique Vitessier serves as CEO and largest shareholder, supported by a
+Chief Commercial Officer (CCO), Chief Operations Officer (COO), and Chief Financial
+Officer (CFO)—all of whom also hold shares following the management buyout. The COO
+is responsible for production and supply chain operations, overseeing Biclou’s 400-
+person production team, a 6-person procurement team handling global supplier
+coordination, and a logistics and inventory unit ensuring material flows align with
+assembly schedules. The CCO leads a 25-person sales and marketing team, managing
+retailer partnerships, customer service, and brand positioning, while also overseeing the
+20-person R&D team, which focuses on product development. The CFO manages
+financial strategy, budgeting, and cost control, leading a 25-person finance team, while
+also overseeing a 5-person sustainability unit focused on sustainability initiatives and
+regulatory compliance. Corporate support functions, including HR, legal, and IT, report
+directly to the CEO.
+Biclou’s relationship with Cofidis is managed across multiple teams and roles. The CCO
+oversees sponsorship agreements, ensuring the partnership strengthens Biclou’s brand
+and aligns with its marketing strategy. The R&D team works closely with Cofidis riders and
+mechanics, incorporating race feedback into future product innovation. The COO
+ensures that team bikes are delivered on schedule, coordinating with production to meet
+professional-level specifications.
+The executive board meets formally on a biweekly basis, with additional strategy sessions
+scheduled around major developments, such as new product launches. These meetings
+serve as a checkpoint to align production schedules with sales forecasts, evaluate
+financial performance, and discuss ongoing R&D efforts. In practice, however, the lines
+between functions are often blurred – issues that arise in production quickly affect sales,
+and financial constraints shape operational decisions.
+
+Board meeting themes
+Recent board meetings have been dominated by concerns over potential supply chain
+disruptions, inefficient production, sustainability, and the Cofidis contract.
+Supply chain disruptions
+Looking back on the last few years, the board realizes that Biclou’s supply chain is highly
+vulnerable to disruptions. During the COVID-era, port shutdowns, factory closures and
+shipping delays slowed the flow of carbon fiber frames and components. Shortly after,
+the Suez Canal blockage caused further disruptions, leaving shipments of tires and
+wheelsets stranded for weeks. More recently, Houthi rebel attacks on container ships in
+the Red Sea have forced rerouted shipping around the Cape of Good Hope, increasing
+both transit times and costs for shipments. These challenges have initiated discussions
+about supplier diversification. Biclou's CEO and COO embarked on a mission to Eastern
+Europe, aiming to assess the viability of alternative suppliers. This trip largely confirmed
+their prior expectations – the region offers a skilled workforce – but they also realized that
+navigating local bureaucratic intricacies and adapting to cultural nuances will require
+time and dedicated resources. Unlike in East Asia, where Kenstone, Giant, and many Tier-
+2 and Tier-3 suppliers operate within a dense, interconnected manufacturing network,
+Eastern Europe’s supply base is much less developed and more fragmented.
+Another recurring theme in board meetings is the persistent supply issues with one of
+Biclou’s component suppliers. Components from this supplier frequently arrive with
+quality inconsistencies, requiring additional quality control in France and forcing last-
+minute scheduling adjustments. On top of this, deliveries are often delayed, further
+complicating production planning. The original quality requirements and delivery
+expectations were clearly outlined in the contract. While the COO admits that Biclou’s
+engineering team has requested minor modifications over time, these changes were not
+substantial, and the quality issues are not related to the modified elements. The COO has
+become increasingly frustrated, arguing that the supplier is either deprioritizing Biclou in
+favor of larger brands or cutting costs on material. Believing the supplier is not holding up
+its end of the agreement, the COO suggests that Biclou should start looking for alternative
+suppliers. The CFO warns that this comes with significant transaction costs and
+questions whether immediately searching for a new supplier is the right approach.
+Inefficient production
+The COO voiced frustration that every time a Cofidis order arrives, production shifts
+entirely, forcing delays on retailer orders. These disruptions, the COO argued, stem from
+poor forecasting. To illustrate the issue, last year’s unexpectedly sunny February caused
+a spike in early-season retailer demand. Forecasting adjustments lagged behind, so by
+the time Biclou increased production of its consumer models, Cofidis placed its first
+major order ahead of the Spring Classics, compounding the disruption. With forecasts
+arriving too late, production remains stuck in reactive mode, preventing a stable workflow
+and reducing overall efficiency. To address this, the COO suggested exploring AI-driven
+forecasting models that could integrate historical trends, retailer behavior, and Cofidis’
+race calendar to align production planning with actual demand. Some board members
+found the potential for automation and real-time forecasting promising, while others
+remained sceptical about whether an algorithm could truly replace managerial
+experience and intuition in predicting cycling industry trends.
+
+Sustainability
+The sustainability team has been floating the idea of pursuing a B-Corp certification.
+Unlike a few major competitors, Biclou has yet to fully assess the social and
+environmental impact across its supply chain, and B-Corp provides a structured
+framework to do so. The CCO is enthusiastic about the marketing potential, believing that
+eco-conscious consumers will pay more for a certified sustainable brand. The CFO takes
+a more cautious view, acknowledging the value of greater transparency and structured
+sustainability efforts, but arguing that Biclou should first integrate double materiality into
+its annual reporting, aligning with emerging EU regulations such as CSRD. The
+sustainability team pushes back, insisting that B-Corp certification should not be seen as
+an endpoint, but as a starting point for mapping sustainability efforts and identifying areas
+for real improvement. The COO warned that Biclou has little leverage to enforce
+sustainability improvements. Even if Biclou maps its environmental footprint, Kenstone,
+Giant, and Shimano already follow industry standards dictated by larger brands like Trek
+and Specialized. If suppliers refuse to comply with additional B-Corp requirements,
+Biclou will face a choice: either accept incomplete sustainability reporting or search for
+alternative suppliers.
+Cofidis contract
+A representative from team Visma | Lease a Bike recently approached Biclou with
+interest, offering an opportunity to partner with one of the most dominant teams in the
+WorldTour. The CEO sees this as a transformative branding move, one that could cement
+Biclou as a premier high-performance brand and drive sales. However, the COO worries
+that taking on another team will push production to the breaking point and create supply
+chain chaos. Cofidis orders already disrupt consumer bike production – adding another
+team would make demand even harder to forecast and balance, increasing the risk of
+missed deliveries, production delays, and frustrated retailers. Complicating matters
+further, Giant—Biclou’s largest supplier—is also competing for the Visma | Lease a Bike
+sponsorship. This presents a strategic dilemma: if Giant wins the contract, it strengthens
+its position as both a competitor and supplier, making it harder for Biclou to negotiate
+favourable terms on frame purchases. If Biclou wins the contract, it risks damaging its
+relationship with Giant, which could reprioritize production for other brands, delay lead
+times on critical components, or limit supply flexibility. The CFO has voiced concerns
+over these financial risks, questioning whether the exposure gained from a second
+sponsorship outweighs the potential for supply disruptions, operational chaos, and long-
+term instability.
