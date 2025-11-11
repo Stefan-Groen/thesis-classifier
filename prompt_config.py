@@ -59,7 +59,8 @@ Classification Options:
 
 Provide your response in the following format:
 Classification: [Threat/Opportunity/Neutral]
-Explanation: [2-3 sentences explaining the specific impact on Biclou, referencing relevant aspects of the company context]"""
+Explanation: [2-3 sentences explaining the specific impact on Biclou, referencing relevant aspects of the company context]
+Advice: [2-3 sentences with concrete, actionable recommendations for Biclou's management team on how to respond to this development]"""
             }
         ],
         "stream": False,

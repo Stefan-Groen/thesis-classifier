@@ -88,23 +88,25 @@ async def classify_article(session, title: str, summary: str, api_key: str, comp
 
 def parse_llm_response(response: str):
     """
-    Parse the LLM response to extract classification and explanation
-    returns typle: (classification, explanation)"""
-
+    Parse the LLM response to extract classification, explanation, and advice
+    returns tuple: (classification, explanation, advice)
+    """
     if not response: 
-        return None, None
+        return None, None, None
     
     lines = response.strip().split('\n')
     classification = None
     explanation = None
+    advice = None
 
     for line in lines:
         if line.startswith("Classification:"):
             classification = line.replace("Classification:", "").strip()
         elif line.startswith("Explanation:"):
             explanation = line.replace("Explanation:", "").strip()
+        elif line.startswith("Advice:"):
+            advice = line.replace("Advice:", "").strip()
 
-    
     # Validate Classification
     valid_classifications = {'Threat', 'Opportunity', 'Neutral'}
     if classification not in valid_classifications:
@@ -112,15 +114,17 @@ def parse_llm_response(response: str):
     
     if not explanation:
         explanation = response
+    
+    if not advice:
+        advice = "No specific advice provided"
 
-    return classification, explanation
+    return classification, explanation, advice
  
 
-def update_database(article_id: int, classification: str, explanation: str, reasoning: str, status: str = 'CLASSIFIED'):
+def update_database(article_id: int, classification: str, explanation: str, advice: str, reasoning: str, status: str = 'CLASSIFIED'):
     """
     Update the article in the database with classification results
     """
-
     load_dotenv()
     CONN_STRING = os.getenv('DATABASE_URL')
     if not CONN_STRING:
@@ -128,19 +132,19 @@ def update_database(article_id: int, classification: str, explanation: str, reas
     
     sql = """
         UPDATE articles
-        SET classification = %s, explanation = %s, reasoning = %s, status = %s, classification_date = NOW()
+        SET classification = %s, explanation = %s, advice = %s, reasoning = %s, status = %s, classification_date = NOW()
         WHERE id = %s
     """
 
     try:
         with psycopg.connect(CONN_STRING) as conn:
             with conn.cursor() as cursor:
-                cursor.execute(sql, (classification, explanation, reasoning, status, article_id))
+                cursor.execute(sql, (classification, explanation, advice, reasoning, status, article_id))
         return True
     except Exception as e:
         print(f"Failed to update article ID {article_id}: {e}")
         return False
-    
+ 
 
 async def main():
     """
@@ -186,19 +190,20 @@ async def main():
                 if finish_reason == 'length':
                      print(f"⚠️ Warning: Response was cut off due to token limit")
 
-                classification, explanation = parse_llm_response(llm_response_content)
+                classification, explanation, advice = parse_llm_response(llm_response_content)
 
                 if classification and explanation: 
-                    succes = update_database(
+                    success = update_database(
                         article_id, 
                         classification, 
-                        explanation, 
+                        explanation,
+                        advice,
                         llm_response_reasoning or ""
                     )
 
-
-                    if succes:
-                        print(f'✓ Classified as: {classification}\n')
+                    if success:
+                        print(f'✓ Classified as: {classification}')
+                        print(f'  Advice: {advice[:60]}...\n')
                         sucessful += 1
                     else:
                         print(f"✗ Failed to update database\n")
@@ -209,7 +214,8 @@ async def main():
                     update_database(
                         article_id, 
                         None, 
-                        None, 
+                        None,
+                        None,
                         None, 
                         status='FAILED (to parse response)'
                     )
@@ -220,7 +226,8 @@ async def main():
                 update_database(
                     article_id, 
                     None, 
-                    None, 
+                    None,
+                    None,
                     None, 
                     status='FAILED (no response)'
                 )
