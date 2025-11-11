@@ -5,8 +5,4 @@ __pycache__/
 
 
 # Ignore old, local-only scripts
-fetch_rss_feeds.py
-python-db-setup.py
-LLM-classifier.py
-node_modules/
 users.sql
