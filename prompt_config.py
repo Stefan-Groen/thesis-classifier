@@ -65,6 +65,6 @@ Advice: [2-3 sentences with concrete, actionable recommendations for Biclou's ma
         ],
         "stream": False,
         "max_tokens": 2048,
-        "temperature": 0.5
+        "temperature": 0.0
     }
 
