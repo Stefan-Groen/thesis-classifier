@@ -5,7 +5,7 @@ name: Fetch RSS Feeds
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 */3 * * *'
 
 # This defines the job that will run
 jobs:
@@ -39,4 +39,4 @@ jobs:
       - name: Run feed fetcher
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python fetch-data-and-write-to-db.py
+        run: python fetch-data-and-write-to-db_multitenant.py
