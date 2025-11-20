@@ -24,6 +24,7 @@ def get_all_organizations():
     Fetch all active organizations from the database
     Returns list of tuples: (id, name, company_context, created_at)
     """
+
     load_dotenv()
     CONN_STRING = os.getenv('DATABASE_URL')
     if not CONN_STRING:
@@ -377,6 +378,7 @@ async def main():
     """
     Main function - classifies articles for ALL organizations
     """
+
     # Load API key
     load_dotenv()
     CHUTES_API_KEY = os.getenv('CHUTES_API_KEY')
@@ -385,7 +387,6 @@ async def main():
 
     # Get all active organizations
     organizations = get_all_organizations()
-
     if not organizations:
         print("No active organizations found in database.")
         return
