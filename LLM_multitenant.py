@@ -54,6 +54,7 @@ def get_pending_articles_for_organization(organization_id: int, organization_cre
     Returns articles that either:
     1. Have no classification record for this organization yet
     2. Have a PENDING status for this organization
+    3. Have a FAILED status for this organization (will retry)
     AND were published after the organization was created
     """
     load_dotenv()
@@ -73,7 +74,9 @@ def get_pending_articles_for_organization(organization_id: int, organization_cre
             ON a.id = ac.article_id
             AND ac.organization_id = %s
         WHERE
-            (ac.id IS NULL OR ac.status = 'PENDING')  -- No classification or pending
+            (ac.id IS NULL
+             OR ac.status = 'PENDING'
+             OR ac.status LIKE 'FAILED%%')  -- No classification, pending, or any failed status
             AND a.date_published >= %s  -- Only articles published after org was created
         ORDER BY a.date_published ASC
     """
@@ -92,65 +95,130 @@ def get_pending_articles_for_organization(organization_id: int, organization_cre
     return rows
 
 
-async def classify_article(session, title: str, summary: str, api_key: str, company_context: str):
+async def classify_article(session, title: str, summary: str, api_key: str, company_context: str, max_retries: int = 3):
     """
     Sends a single article to LLM for classification
     Returns the classification result and explanation
+    Includes retry logic for rate limiting (429 errors)
     """
     api_config = get_api_config(api_key)
     url = api_config['url']
     headers = api_config['headers']
     body = get_classification_prompt(company_context, title, summary)
 
-    try:
-        async with session.post(url, headers=headers, json=body) as response:
-            response.raise_for_status()
-            data = await response.json()
-            content = data['choices'][0]['message']['content']
-            reasoning = data['choices'][0]['message'].get("reasoning_content")
-            finish_reason = data['choices'][0].get('finish_reason')
-            return content, reasoning, finish_reason
-    except aiohttp.ClientError as e:
-        print(f"API Request failed: {e}")
-        return None, None, None
-    except Exception as e:
-        print(f"Unexpected error during classification: {e}")
-        return None, None, None
+    for attempt in range(max_retries):
+        try:
+            async with session.post(url, headers=headers, json=body) as response:
+                if response.status == 429:
+                    # Rate limited - wait and retry
+                    retry_after = int(response.headers.get('Retry-After', 2))
+                    wait_time = retry_after if attempt == 0 else retry_after * (2 ** attempt)
+                    print(f"  ⚠️  Rate limited (429). Waiting {wait_time}s before retry {attempt + 1}/{max_retries}...")
+                    await asyncio.sleep(wait_time)
+                    continue
+
+                response.raise_for_status()
+                data = await response.json()
+                content = data['choices'][0]['message']['content']
+                reasoning = data['choices'][0]['message'].get("reasoning_content")
+                finish_reason = data['choices'][0].get('finish_reason')
+                return content, reasoning, finish_reason
+
+        except aiohttp.ClientResponseError as e:
+            if e.status == 429 and attempt < max_retries - 1:
+                wait_time = 2 ** (attempt + 1)
+                print(f"  ⚠️  Rate limited (429). Waiting {wait_time}s before retry {attempt + 1}/{max_retries}...")
+                await asyncio.sleep(wait_time)
+                continue
+            else:
+                print(f"  ✗ API Request failed: {e}")
+                return None, None, None
+        except aiohttp.ClientError as e:
+            print(f"  ✗ API Request failed: {e}")
+            return None, None, None
+        except Exception as e:
+            print(f"  ✗ Unexpected error during classification: {e}")
+            return None, None, None
+
+    print(f"  ✗ Max retries ({max_retries}) exceeded")
+    return None, None, None
 
 
 def parse_llm_response(response: str):
     """
     Parse the LLM response to extract classification, explanation, and advice
+    Expects JSON format: {"classification": "...", "explanation": "...", "advice": "..."}
     Returns tuple: (classification, explanation, advice)
     """
+    import json
+    import re
+
     if not response:
         return None, None, None
 
-    lines = response.strip().split('\n')
-    classification = None
-    explanation = None
-    advice = None
+    try:
+        # First, try parsing the whole response as JSON
+        response_clean = response.strip()
 
-    for line in lines:
-        if line.startswith("Classification:"):
-            classification = line.replace("Classification:", "").strip()
-        elif line.startswith("Explanation:"):
-            explanation = line.replace("Explanation:", "").strip()
-        elif line.startswith("Advice:"):
-            advice = line.replace("Advice:", "").strip()
+        # Remove markdown code blocks if present
+        if response_clean.startswith('```'):
+            # Remove ```json or ``` at start and ``` at end
+            response_clean = re.sub(r'^```(?:json)?\s*\n', '', response_clean)
+            response_clean = re.sub(r'\n```\s*$', '', response_clean)
 
-    # Validate Classification
-    valid_classifications = {'Threat', 'Opportunity', 'Neutral'}
-    if classification not in valid_classifications:
-        classification = "Error: Unknown"
+        data = json.loads(response_clean)
 
-    if not explanation:
-        explanation = response
+        classification = data.get('classification', '').strip()
+        explanation = data.get('explanation', '').strip()
+        advice = data.get('advice', '').strip()
 
-    if not advice:
-        advice = "No specific advice provided"
+        # Validate Classification
+        valid_classifications = {'Threat', 'Opportunity', 'Neutral'}
+        if classification not in valid_classifications:
+            classification = "Error: Unknown"
 
-    return classification, explanation, advice
+        if not explanation:
+            explanation = "No explanation provided"
+
+        if not advice:
+            advice = "No specific advice provided"
+
+        return classification, explanation, advice
+
+    except (json.JSONDecodeError, AttributeError, KeyError) as e:
+        print(f"  ⚠️  JSON parsing failed: {e}")
+        print(f"  Raw response (first 500 chars):")
+        print(f"  {response[:500]}")
+        if len(response) > 500:
+            print(f"  ... (total length: {len(response)} chars)")
+
+        # Fallback: try to extract from old text format
+        lines = response.strip().split('\n')
+        classification = None
+        explanation = None
+        advice = None
+
+        for line in lines:
+            line_lower = line.lower().strip()
+            if line_lower.startswith("classification:") or line_lower.startswith("**classification:**"):
+                classification = re.sub(r'\*\*classification:\*\*|classification:', '', line, flags=re.IGNORECASE).strip()
+            elif line_lower.startswith("explanation:") or line_lower.startswith("**explanation:**"):
+                explanation = re.sub(r'\*\*explanation:\*\*|explanation:', '', line, flags=re.IGNORECASE).strip()
+            elif line_lower.startswith("advice:") or line_lower.startswith("**advice:**"):
+                advice = re.sub(r'\*\*advice:\*\*|advice:', '', line, flags=re.IGNORECASE).strip()
+
+        # Validate Classification
+        valid_classifications = {'Threat', 'Opportunity', 'Neutral'}
+        if classification and classification not in valid_classifications:
+            classification = "Error: Unknown"
+
+        if not explanation:
+            explanation = response if response else "No explanation provided"
+
+        if not advice:
+            advice = "No specific advice provided"
+
+        return classification, explanation, advice
 
 
 def upsert_classification(
@@ -248,6 +316,9 @@ async def process_organization(session, organization, api_key, limit=None):
 
         # Classify the article using this organization's context
         result = await classify_article(session, title, summary, api_key, company_context)
+
+        # Add small delay between requests to avoid rate limiting
+        await asyncio.sleep(0.5)
 
         if result:
             llm_response_content, llm_response_reasoning, finish_reason = result

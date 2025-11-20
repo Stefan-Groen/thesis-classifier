@@ -4,11 +4,9 @@ Multi-Tenant Article Fetching Script
 This script fetches articles from RSS feeds and stores them in the database.
 Articles are organization-agnostic (shared across all organizations).
 
-Key Changes from Original:
-- Articles table no longer has classification columns
+- Read: main() --> fetch_feeds() --> store_articles()
 - Articles are stored once and shared across all organizations
-- No changes needed to the fetching logic itself
-- The classification happens in LLM_multitenant.py instead
+- The classification happens in LLM_multitenant.py
 """
 
 import feedparser
@@ -27,15 +25,35 @@ def fetch_feeds(url):
     len_feed = len(feed.entries)
     return articles, len_feed
 
+    # - - - - - output example 'articles'  - - - - -                --> List of dictionaries
+    # [
+    #     {
+    #         'title': "article title"
+    #         'title_detail': {"dictionary with title details"},
+    #         'summary': "Article summary",
+    #         'link': 'Article link',
+    #         'id': 'unique article id',
+    #         'published': 'data published',
+    #     },
+    #     {
+    #         'title': "article title"
+    #         'title_detail': {"dictionary with title details"},
+    #         'summary': "Article summary",
+    #         'link': 'Article link',
+    #         'id': 'unique article id',
+    #         'published': 'data published',
+    #     },
+    # ]
+
 
 def store_articles(articles):
     """
     Checks if articles are already stored in database, if not stores them.
-    Function only returns the count of NEW articles.
+    Function stores articles in DB and only RETURNS the count of NEW articles.
 
-    NOTE: Articles are now organization-agnostic (shared across all organizations)
-    Classification happens later in LLM_multitenant.py
+    Articles are stored in the ARTICLES table without specific organization classification.
     """
+
     # Get connection string from .env file
     CONN_STRING = os.getenv('DATABASE_URL')
     if not CONN_STRING:
@@ -98,7 +116,7 @@ def store_articles(articles):
 
 
 def main():
-    # Load environment variables from .env file
+    # Load environment variables from .env file 
     load_dotenv()
 
     NOS_links = [
@@ -123,6 +141,10 @@ def main():
 
     total_new_articles = 0
 
+    # For every URL in the list
+    # - call fetch_feeds() --> returns a list of articles and the lenghth of the feed
+    # - cal store_articles() --> insert articles in 'articles' table if not already present --> returns number of NEW articles stored
+    # - If anything fails for a feed, print error and continue to next feed 
     for url in NOS_links:
         try:
             articles, len_feed = fetch_feeds(url)

@@ -39,7 +39,7 @@ Summary: {summary}
 ==================================================
 
 TASK:
-Based on the detailed company context above, classify this news article and explain its potential impact on Biclou Prestige.
+Based on the detailed company context above, classify this news article and explain its potential impact on the company.
 
 Consider (but do not limit yourself to) these aspects when analyzing:
 - Supply chain implications (suppliers, logistics, shipping routes, disruptions)
@@ -53,14 +53,18 @@ Consider (but do not limit yourself to) these aspects when analyzing:
 - Geographic factors (Taiwan, China, Japan, Europe, shipping routes)
 
 Classification Options:
-- Threat: Could negatively impact Biclou's business, supply chain, reputation, or operations
-- Opportunity: Could benefit Biclou or presents a strategic opportunity
-- Neutral: No significant direct impact on Biclou
+- Threat: Could negatively impact the company's business, supply chain, reputation, or operations
+- Opportunity: Could benefit the company or presents a strategic opportunity
+- Neutral: No significant direct impact on the company
 
-Provide your response in the following format:
-Classification: [Threat/Opportunity/Neutral]
-Explanation: [2-3 sentences explaining the specific impact on Biclou, referencing relevant aspects of the company context]
-Advice: [2-3 sentences with concrete, actionable recommendations for Biclou's management team on how to respond to this development]"""
+Provide your response as a valid JSON object with the following structure:
+{{
+  "classification": "Threat" | "Opportunity" | "Neutral",
+  "explanation": "2-3 sentences explaining the specific impact on the company, referencing relevant aspects of the company context",
+  "advice": "2-3 sentences with concrete, actionable recommendations for the company's management team on how to respond to this development"
+}}
+
+IMPORTANT: Return ONLY the JSON object, no additional text or markdown formatting."""
             }
         ],
         "stream": False,
