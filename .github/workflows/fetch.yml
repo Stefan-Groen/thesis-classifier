@@ -39,4 +39,4 @@ jobs:
       - name: Run feed fetcher
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python fetch-data-and-write-to-db_multitenant.py
+        run: python fetch_to_db_multi.py
