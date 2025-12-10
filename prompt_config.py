@@ -60,6 +60,7 @@ Classification Options:
 Provide your response as a valid JSON object with the following structure:
 {{
   "classification": "Threat" | "Opportunity" | "Neutral",
+  "summary": "3-4 sentences briefly describing what this article is about, only summarize the article, don't include impact analysis",
   "explanation": "2-3 sentences explaining the specific impact on the company, referencing relevant aspects of the company context",
   "advice": "2-3 sentences with concrete, actionable recommendations for the company's management team on how to respond to this development"
 }}

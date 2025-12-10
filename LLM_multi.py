@@ -147,15 +147,15 @@ async def classify_article(session, title: str, summary: str, api_key: str, comp
 
 def parse_llm_response(response: str):
     """
-    Parse the LLM response to extract classification, explanation, and advice
-    Expects JSON format: {"classification": "...", "explanation": "...", "advice": "..."}
-    Returns tuple: (classification, explanation, advice)
+    Parse the LLM response to extract classification, summary, explanation, and advice
+    Expects JSON format: {"classification": "...", "summary": "...", "explanation": "...", "advice": "..."}
+    Returns tuple: (classification, summary, explanation, advice)
     """
     import json
     import re
 
     if not response:
-        return None, None, None
+        return None, None, None, None
 
     try:
         # First, try parsing the whole response as JSON
@@ -170,6 +170,7 @@ def parse_llm_response(response: str):
         data = json.loads(response_clean)
 
         classification = data.get('classification', '').strip()
+        summary = data.get('summary', '').strip()
         explanation = data.get('explanation', '').strip()
         advice = data.get('advice', '').strip()
 
@@ -178,13 +179,16 @@ def parse_llm_response(response: str):
         if classification not in valid_classifications:
             classification = "Error: Unknown"
 
+        if not summary:
+            summary = "No summary provided"
+
         if not explanation:
             explanation = "No explanation provided"
 
         if not advice:
             advice = "No specific advice provided"
 
-        return classification, explanation, advice
+        return classification, summary, explanation, advice
 
     except (json.JSONDecodeError, AttributeError, KeyError) as e:
         print(f"  ⚠️  JSON parsing failed: {e}")
@@ -196,6 +200,7 @@ def parse_llm_response(response: str):
         # Fallback: try to extract from old text format
         lines = response.strip().split('\n')
         classification = None
+        summary = None
         explanation = None
         advice = None
 
@@ -203,6 +208,8 @@ def parse_llm_response(response: str):
             line_lower = line.lower().strip()
             if line_lower.startswith("classification:") or line_lower.startswith("**classification:**"):
                 classification = re.sub(r'\*\*classification:\*\*|classification:', '', line, flags=re.IGNORECASE).strip()
+            elif line_lower.startswith("summary:") or line_lower.startswith("**summary:**"):
+                summary = re.sub(r'\*\*summary:\*\*|summary:', '', line, flags=re.IGNORECASE).strip()
             elif line_lower.startswith("explanation:") or line_lower.startswith("**explanation:**"):
                 explanation = re.sub(r'\*\*explanation:\*\*|explanation:', '', line, flags=re.IGNORECASE).strip()
             elif line_lower.startswith("advice:") or line_lower.startswith("**advice:**"):
@@ -213,19 +220,23 @@ def parse_llm_response(response: str):
         if classification and classification not in valid_classifications:
             classification = "Error: Unknown"
 
+        if not summary:
+            summary = "No summary provided"
+
         if not explanation:
             explanation = response if response else "No explanation provided"
 
         if not advice:
             advice = "No specific advice provided"
 
-        return classification, explanation, advice
+        return classification, summary, explanation, advice
 
 
 def upsert_classification(
     article_id: int,
     organization_id: int,
     classification: str,
+    summary: str,
     explanation: str,
     advice: str,
     reasoning: str,
@@ -245,6 +256,7 @@ def upsert_classification(
             article_id,
             organization_id,
             classification,
+            summary,
             explanation,
             advice,
             reasoning,
@@ -252,10 +264,11 @@ def upsert_classification(
             classification_date,
             created_at
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
         ON CONFLICT (article_id, organization_id)
         DO UPDATE SET
             classification = EXCLUDED.classification,
+            summary = EXCLUDED.summary,
             explanation = EXCLUDED.explanation,
             advice = EXCLUDED.advice,
             reasoning = EXCLUDED.reasoning,
@@ -271,6 +284,7 @@ def upsert_classification(
                     article_id,
                     organization_id,
                     classification,
+                    summary,
                     explanation,
                     advice,
                     reasoning,
@@ -327,13 +341,14 @@ async def process_organization(session, organization, api_key, limit=None):
             if finish_reason == 'length':
                 print(f"  ⚠️  Warning: Response was cut off due to token limit")
 
-            classification, explanation, advice = parse_llm_response(llm_response_content)
+            classification, summary, explanation, advice = parse_llm_response(llm_response_content)
 
             if classification and explanation:
                 success = upsert_classification(
                     article_id,
                     org_id,
                     classification,
+                    summary,
                     explanation,
                     advice,
                     llm_response_reasoning or ""
@@ -355,6 +370,7 @@ async def process_organization(session, organization, api_key, limit=None):
                     None,
                     None,
                     None,
+                    None,
                     status='FAILED (to parse response)'
                 )
                 failed += 1
@@ -363,6 +379,7 @@ async def process_organization(session, organization, api_key, limit=None):
             upsert_classification(
                 article_id,
                 org_id,
+                None,
                 None,
                 None,
                 None,
