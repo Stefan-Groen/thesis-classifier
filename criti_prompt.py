@@ -104,7 +104,7 @@ def get_criticality_prompt(title: str, summary: str, classification: str,
 
 
     return {
-    "model": "MiniMaxAI/MiniMax-M2",  # Minimax M2 model via Chutes
+    "model": "MiniMaxAI/MiniMax-M2.1-TEE",  # Minimax M2 model via Chutes
     "messages": [
         {
             "role": "system",
