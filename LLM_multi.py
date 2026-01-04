@@ -22,7 +22,8 @@ from prompt_config import get_api_config, get_classification_prompt
 def get_all_organizations():
     """
     Fetch all active organizations from the database
-    Returns list of tuples: (id, name, company_context, created_at)
+    Returns list of tuples: (id, name, company_context, created_at, user_prompt_template,
+                             system_prompt, max_tokens, temperature)
     """
 
     load_dotenv()
@@ -31,7 +32,8 @@ def get_all_organizations():
         raise RuntimeError("DATABASE_URL not found in environment variables.")
 
     sql = """
-        SELECT id, name, company_context, created_at
+        SELECT id, name, company_context, created_at, user_prompt_template,
+               system_prompt, max_tokens, temperature
         FROM organizations
         WHERE is_active = TRUE
         ORDER BY id
@@ -96,16 +98,26 @@ def get_pending_articles_for_organization(organization_id: int, organization_cre
     return rows
 
 
-async def classify_article(session, title: str, summary: str, api_key: str, company_context: str, max_retries: int = 3):
+async def classify_article(session, title: str, summary: str, api_key: str, company_context: str,
+                          prompt_module_name: str = None, max_retries: int = 3):
     """
     Sends a single article to LLM for classification
     Returns the classification result and explanation
     Includes retry logic for rate limiting (429 errors)
+
+    Args:
+        session: aiohttp ClientSession
+        title: Article title
+        summary: Article summary
+        api_key: API key for authentication
+        company_context: Company-specific context
+        prompt_module_name: Optional custom prompt module name (e.g., "prompt_org1")
+        max_retries: Maximum number of retry attempts
     """
     api_config = get_api_config(api_key)
     url = api_config['url']
     headers = api_config['headers']
-    body = get_classification_prompt(company_context, title, summary)
+    body = get_classification_prompt(company_context, title, summary, prompt_module_name)
 
     for attempt in range(max_retries):
         try:
@@ -300,11 +312,15 @@ async def process_organization(session, organization, api_key, limit=None):
     """
     Process all pending articles for a single organization
     """
-    org_id, org_name, company_context, org_created_at = organization
+    # Unpack organization data including custom prompt configuration
+    (org_id, org_name, company_context, org_created_at,
+     user_prompt_template, system_prompt, max_tokens, temperature) = organization
 
     print(f"\n{'='*80}")
     print(f"Processing organization: {org_name} (ID: {org_id})")
     print(f"Created: {org_created_at}")
+    if user_prompt_template:
+        print(f"Custom Prompt: {user_prompt_template}")
     print(f"{'='*80}")
 
     # Get articles that need classification for this organization
@@ -329,8 +345,9 @@ async def process_organization(session, organization, api_key, limit=None):
         print(f"[{org_name}] Processing article {idx}/{len(pending_articles)} (ID: {article_id})")
         print(f"  Title: {title[:60]}...")
 
-        # Classify the article using this organization's context
-        result = await classify_article(session, title, summary, api_key, company_context)
+        # Classify the article using this organization's context and custom prompt (if specified)
+        result = await classify_article(session, title, summary, api_key, company_context,
+                                       prompt_module_name=user_prompt_template)
 
         # Add small delay between requests to avoid rate limiting
         await asyncio.sleep(0.5)

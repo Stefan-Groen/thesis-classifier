@@ -1,3 +1,6 @@
+import importlib
+import os
+import sys
 
 
 def get_api_config(api_key: str):
@@ -14,10 +17,79 @@ def get_api_config(api_key: str):
     }
 
 
-def get_classification_prompt(company_context: str, title: str, summary: str):
+def load_prompt_module(prompt_module_name: str):
     """
-    Returns the complete prompt body for article classification
+    Dynamically load a prompt module from the prompts/ directory.
+
+    Args:
+        prompt_module_name: Name of the module (e.g., "prompt_org1" or "prompt_default")
+                           without .py extension
+
+    Returns:
+        The loaded module object, or None if loading fails
+
+    Example:
+        module = load_prompt_module("prompt_org1")
+        if module:
+            prompt = module.get_classification_prompt(context, title, summary)
     """
+    if not prompt_module_name:
+        return None
+
+    try:
+        # Get the directory where this script is located
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        prompts_dir = os.path.join(script_dir, "prompts")
+
+        # Add prompts directory to Python path if not already there
+        if prompts_dir not in sys.path:
+            sys.path.insert(0, prompts_dir)
+
+        # Import the module dynamically
+        module = importlib.import_module(prompt_module_name)
+
+        # Verify the module has the required function
+        if not hasattr(module, 'get_classification_prompt'):
+            print(f"  ⚠️  Warning: Module '{prompt_module_name}' does not have 'get_classification_prompt' function")
+            return None
+
+        return module
+
+    except ModuleNotFoundError:
+        print(f"  ⚠️  Warning: Prompt module '{prompt_module_name}' not found in prompts/ directory")
+        return None
+    except Exception as e:
+        print(f"  ⚠️  Warning: Failed to load prompt module '{prompt_module_name}': {e}")
+        return None
+
+
+def get_classification_prompt(company_context: str, title: str, summary: str,
+                             prompt_module_name: str = None):
+    """
+    Returns the complete prompt body for article classification.
+
+    Args:
+        company_context: Company-specific context for the organization
+        title: Article title
+        summary: Article summary
+        prompt_module_name: Optional name of custom prompt module (e.g., "prompt_org1")
+                          If None or not found, uses default prompt below
+
+    Returns:
+        Dictionary containing the API request body with model, messages, etc.
+    """
+
+    # Try to load organization-specific prompt module if specified
+    if prompt_module_name:
+        custom_module = load_prompt_module(prompt_module_name)
+        if custom_module:
+            try:
+                return custom_module.get_classification_prompt(company_context, title, summary)
+            except Exception as e:
+                print(f"  ⚠️  Warning: Error calling custom prompt function: {e}")
+                print(f"  ⚠️  Falling back to default prompt")
+
+    # Default prompt (fallback when no custom prompt is specified or loading fails)
     return {
         "model": "deepseek-ai/DeepSeek-R1",
         "messages": [
