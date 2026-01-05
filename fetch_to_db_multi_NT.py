@@ -18,21 +18,15 @@ import requests
 
 
 def fetch_feeds(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Accept": "application/rss+xml, application/xml, text/xml",
-        "Accept-Language": "nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7",
-        "Connection": "keep-alive",
-    }
-
-    response = requests.get(url, headers=headers, timeout=15)
-    response.raise_for_status()  # gooit error bij 4xx/5xx
-
-    feed = feedparser.parse(response.content)
-
+    feed = feedparser.parse(
+        url,
+        request_headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "Accept": "application/rss+xml, application/xml, text/xml",
+        }
+    )
     articles = feed.entries
     len_feed = len(feed.entries)
-
     return articles, len_feed
 
     # - - - - - output example 'articles'  - - - - -                --> List of dictionaries
