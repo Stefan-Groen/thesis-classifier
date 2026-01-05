@@ -17,10 +17,13 @@ from datetime import datetime
 
 
 def fetch_feeds(url):
-    """
-    Fetch articles from RSS feeds
-    """
-    feed = feedparser.parse(url)
+    feed = feedparser.parse(
+        url,
+        request_headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "Accept": "application/rss+xml, application/xml, text/xml",
+        }
+    )
     articles = feed.entries
     len_feed = len(feed.entries)
     return articles, len_feed
