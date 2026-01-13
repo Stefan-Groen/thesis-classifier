@@ -69,12 +69,12 @@ CLASSIFICATION OPTIONS:
 OUTPUT FORMAT:
 Provide your response as a valid JSON object with the following structure:
 
-{
+{{
   "classification": "Threat" | "Opportunity" | "Neutral",
   "summary": "3–4 sentences summarizing what the article is about, without impact analysis",
   "explanation": "2–3 sentences explaining the second-order implications for Ahold Delhaize or ADIL, explicitly moving beyond obvious first-order effects",
   "advice": "2–3 sentences with concrete, actionable recommendations for management, indicating where judgement, monitoring, or scenario analysis is required"
-}
+}}
 
 IMPORTANT:
 - Focus on second-order and indirect effects rather than obvious impacts

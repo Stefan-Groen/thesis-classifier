@@ -73,12 +73,12 @@ CLASSIFICATION OPTIONS:
 OUTPUT FORMAT:
 Provide your response as a valid JSON object with the following structure:
 
-{
+{{
   "classification": "Threat" | "Opportunity" | "Neutral",
   "summary": "3–4 sentences summarizing what the article is about, without interpretation or impact analysis",
   "explanation": "2–3 sentences explaining the potential impact on the company, clearly distinguishing between high-, medium-, and low-confidence elements and referencing relevant aspects of the company context",
   "advice": "2–3 sentences outlining actionable recommendations, explicitly noting where human judgement or additional information is required"
-}
+}}
 
 IMPORTANT:
 - Do not overstate certainty
